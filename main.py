@@ -35,7 +35,7 @@ def chunk_mapper(chunk):
     return mapper(chunk)
 
 def open_file():
-    with open("Book.txt", "r") as file:
+    with open("Text.txt", "r") as file:
         content = file.read()
     return content.split()
 
