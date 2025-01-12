@@ -26,18 +26,24 @@ def reducer(cnt1, cnt2):
     return cnt1
 
 def chunkify(data, number_of_chunks):
-#Делит данные на заданное количество чанков.
+    """Делит данные на заданное количество чанков."""
     k, m = divmod(len(data), number_of_chunks)
     return (data[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(number_of_chunks))
 
 def chunk_mapper(chunk):
-    #Частота слов
+    """Обрабатывает чанк данных (частоту слов)."""
     return mapper(chunk)
 
 def open_file():
     with open("Text.txt", "r") as file:
         content = file.read()
     return content.split()
+
+def save_to_file(result, filename="result.txt"):
+    """Сохраняет результат в файл."""
+    with open(filename, "w") as file:
+        for word, count in result.most_common():
+            file.write(f"{word}: {count}\n")
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -51,7 +57,12 @@ if __name__ == "__main__":
         mapped = pool.map(chunk_mapper, data_chunks)
 
     result = reduce(reducer, mapped)
+
+    # Вывод результата в консоль
     print(result)
+
+    # Сохранение результата в файл
+    save_to_file(result)
 
     end_time = time.time()
     print(f"Время выполнения: {end_time - start_time:.2f} секунд")
